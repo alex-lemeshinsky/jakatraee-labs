@@ -14,7 +14,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.release>17</maven.compiler.release>
         <junit.version>5.13.2</junit.version>
+        <jetty.version>12.1.6</jetty.version>
     </properties>
 
     <dependencies>
@@ -40,6 +42,17 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.eclipse.jetty.ee11</groupId>
+                <artifactId>jetty-ee11-maven-plugin</artifactId>
+                <version>${jetty.version}</version>
+                <configuration>
+                    <scan>1</scan>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                    </webApp>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
