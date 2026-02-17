@@ -1,0 +1,41 @@
+body {
+    font-family: sans-serif;
+    max-width: 700px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+nav a {
+    margin-right: 15px;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+}
+
+table td {
+    padding: 4px 12px 4px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 5px 0;
+}
+
+.group {
+    color: #777;
+    margin-left: 10px;
+}
