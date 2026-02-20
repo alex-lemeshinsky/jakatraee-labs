@@ -268,7 +268,7 @@ footer {
 ───────────────────────────────── */
 
 .top-bar {
-    background: rgba(26, 26, 46, 0.6); /* напівпрозорий card */
+    background: rgba(26, 26, 46, 0.6);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
     position: sticky;
@@ -308,7 +308,6 @@ footer {
     font-size: 0.85rem;
 }
 
-/* Адаптивність */
 @media (max-width: 768px) {
     .top-bar .container {
         flex-wrap: wrap;
@@ -320,5 +319,108 @@ footer {
     .btn-icon, .user-info {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;
+    }
+}
+
+.status-open {
+    background: rgba(0,255,157,0.15);
+    color: var(--accent);
+}
+
+.status-closed {
+    background: rgba(255,77,77,0.15);
+    color: var(--error);
+}
+
+/* ────────────────────────────────
+   Стилі для детальної теми та дописів
+───────────────────────────────── */
+
+.topic-detail {
+    padding: 2rem;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+}
+
+.posts-list {
+    margin-top: 2rem;
+}
+
+.post-item {
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+.post-item:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(0,255,157,0.3);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.post-avatar i {
+    color: var(--accent);
+    opacity: 0.9;
+}
+
+.post-meta strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.post-meta small {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-left: 0.8rem;
+}
+
+.post-body {
+    margin-bottom: 1rem;
+}
+
+.post-content {
+    word-break: break-word;
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.post-actions .btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .post-item {
+        padding: 1.2rem;
+    }
+
+    .post-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .post-meta small {
+        margin-left: 0;
+    }
+
+    .post-actions {
+        flex-wrap: wrap;
     }
 }

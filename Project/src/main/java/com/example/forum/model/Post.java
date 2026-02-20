@@ -26,4 +26,11 @@ public class Post {
     public void setId(long id) { this.id = id; }
 
     public void setCreatedAt(LocalDateTime now) { this.createdAt = now; }
+
+    public String getFormattedCreatedAt() {
+        if (createdAt == null) {
+            return "—";
+        }
+        return createdAt.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm"));
+    }
 }

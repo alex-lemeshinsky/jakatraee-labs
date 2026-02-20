@@ -2,7 +2,6 @@ package com.example.forum.service;
 
 import com.example.forum.model.Topic;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +9,10 @@ public class TopicServiceImpl implements TopicService {
     private List<Topic> topics = new ArrayList<>();
 
     public TopicServiceImpl() { // при ініціалізації додаєм тестові теми
-        topics.add(new Topic(1L, "Тема 1", "Опис теми 1", false));
-        topics.add(new Topic(2L, "Тема 2", "Опис теми 2", true));
-        topics.add(new Topic(3L, "Тема 3", "Опис теми 3", true));
-        topics.add(new Topic(4L, "Тема 4", "Опис теми 4", false));
+        topics.add(new Topic(1L, "Як правильно готувати каву вдома, щоб була як в кав'ярні?", "Ділимося секретами, рецептами, сортами зерен, кавоварками та помилками, яких варто уникати. Від еспресо до альтернативних методів — усе про каву без фільтрів.", false));
+        topics.add(new Topic(2L, "Як ви економите на продуктах у 2026 році?", "Список магазинів, акції, додатки, рецепти з дешевих продуктів, чи варто купувати оптом, де брати знижки. Реальні лайфхаки, а не теорія.", false));
+        topics.add(new Topic(3L, "Які подкасти вас рятують у транспорті / на роботі?", "Українські, російськомовні, англомовні — все. Теми, ведучі, скільки слухаєте, чому саме вони. Рекомендації з посиланнями.", true));
+        topics.add(new Topic(4L, "Найгірші подарунки, які ви коли-небудь отримували (і що з ними зробили)", "Розкажіть смішні/страшні історії. Від «подарункового набору для риболовлі, коли я боюся води» до «сертифікату на стрибок з парашутом». Без образ.", false));
     }
 
     @Override

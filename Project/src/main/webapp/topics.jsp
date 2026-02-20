@@ -55,62 +55,56 @@
             </a>
         </c:if>
     </div>
-
-    <!-- Список тем як картки -->
     <div class="cards">
         <c:forEach var="topic" items="${topics}">
             <div class="card topic-card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div style="flex: 1;">
-                        <h3 style="margin: 0 0 0.6rem 0;">
-                            <a href="${pageContext.request.contextPath}/posts?topicId=${topic.id}" style="color: var(--text); text-decoration: none;">
+                <div class="topic-header">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <h3 style="margin: 0;">
+                            <a href="${pageContext.request.contextPath}/posts?topicId=${topic.id}"
+                               style="color: var(--text); text-decoration: none;">
                                 <c:out value="${topic.title}"/>
                             </a>
                         </h3>
-                        <p style="color: var(--muted); margin-bottom: 0.8rem;">
-                            <c:out value="${topic.description}"/>
-                        </p>
-                        <div style="display: flex; gap: 1.5rem; font-size: 0.9rem; color: var(--muted);">
-                                <span>
-                                    <i class="far fa-calendar-alt"></i>
-<%--                                    <c:choose>--%>
-<%--                                        <c:when test="${not empty topic.createdAt}">--%>
-<%--                                            <fmt:formatDate value="${topic.createdAt}" pattern="dd.MM.yyyy HH:mm"/>--%>
-<%--                                        </c:when>--%>
-<%--                                        <c:otherwise>—</c:otherwise>--%>
-<%--                                    </c:choose>--%>
-                                </span>
-                            <span>
-                                    <i class="far fa-comment-dots"></i>
-                                    ${topic.posts != null ? topic.posts.size() : 0} дописів
-                                </span>
+                        <div class="topic-actions" style="text-align: right;">
+                            <c:choose>
+                                <c:when test="${topic.closed}">
+                                    <span class="status-closed">Закрита</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="status-open">Відкрита</span>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:if test="${sessionScope.user.role == 'admin'}">
+                                <form action="${pageContext.request.contextPath}/topics" method="post" style="margin-top: 0.5rem;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="${topic.id}">
+                                    <button type="submit" class="btn btn-small"
+                                            style="background: var(--error); color: white;">
+                                        Видалити
+                                    </button>
+                                </form>
+                            </c:if>
                         </div>
                     </div>
-
-                    <div style="text-align: right; min-width: 120px;">
-                        <c:choose>
-                            <c:when test="${topic.closed}">
-                                <span class="status-closed">Закрита</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span class="status-open">Відкрита</span>
-                            </c:otherwise>
-                        </c:choose>
-
-                        <c:if test="${sessionScope.user.role == 'admin'}">
-                            <form action="${pageContext.request.contextPath}/topics" method="post" style="margin-top: 1rem;">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="${topic.id}">
-                                <button type="submit" class="btn btn-small" style="background: var(--error); color: white; width: 100%;">
-                                    Видалити
-                                </button>
-                            </form>
-                        </c:if>
+                    <p style="color: var(--muted); margin: 0.8rem 0;">
+                        <c:out value="${topic.description}"/>
+                    </p>
+                    <div style="display: flex; gap: 1.5rem; font-size: 0.9rem; color: var(--muted);">
+                        <span>
+                            <i class="far fa-calendar-alt"></i>
+                            <small style="margin-left: 0.4rem;">
+                                <c:out value="${topic.formattedCreatedAt}" />
+                            </small>
+                        </span>
+                        <span>
+                            <i class="far fa-comment-dots"></i>
+                            ${topic.posts != null ? topic.posts.size() : 0} дописів
+                        </span>
                     </div>
                 </div>
             </div>
         </c:forEach>
-
         <c:if test="${empty topics}">
             <div class="card" style="text-align: center; padding: 3rem; color: var(--muted);">
                 <h3>Поки що немає тем</h3>
@@ -118,8 +112,6 @@
             </div>
         </c:if>
     </div>
-
-    <!-- Форма створення теми для адміна -->
     <c:if test="${sessionScope.user.role == 'admin'}">
         <div class="card" style="margin-top: 3rem;">
             <h2 style="margin-bottom: 1.5rem;">Створити нову тему</h2>
@@ -143,13 +135,11 @@
         </div>
     </c:if>
 </div>
-
 <footer>
     <div class="container">
         <p>© 2026 Форум «Говоримо Відкрито»</p>
         <small>Навчальний проєкт · Дані зберігаються тільки в пам'яті</small>
     </div>
 </footer>
-
 </body>
 </html>
