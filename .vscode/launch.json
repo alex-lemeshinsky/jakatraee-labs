@@ -2,12 +2,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run JakartaEE App (Jetty)",
+      "name": "Run JakartaEE Lab1 (Jetty)",
       "type": "node-terminal",
       "request": "launch",
       "command": "cd \"${workspaceFolder}/Lab1\" && ./mvnw -Dstyle.color=never -DskipTests jetty:run",
       "windows": {
         "command": "cd /d \"${workspaceFolder}\\Lab1\" && mvnw.cmd -Dstyle.color=never -DskipTests jetty:run"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "0\\.0\\.0\\.0:(\\d+)",
+        "uriFormat": "http://localhost:%s/"
+      }
+    },
+    {
+      "name": "Run JakartaEE Project (Jetty)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "cd \"${workspaceFolder}/Project\" && ./mvnw -Dstyle.color=never -DskipTests jetty:run",
+      "windows": {
+        "command": "cd /d \"${workspaceFolder}\\Project\" && mvnw.cmd -Dstyle.color=never -DskipTests jetty:run"
       },
       "serverReadyAction": {
         "action": "openExternally",
