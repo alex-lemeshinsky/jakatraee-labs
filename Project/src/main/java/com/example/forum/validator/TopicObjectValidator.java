@@ -1,13 +1,15 @@
 package com.example.forum.validator;
 
-import com.example.forum.model.Topic;
+import com.example.forum.dto.TopicDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class TopicObjectValidator implements ConstraintValidator<ValidTopic, Topic> {
+public class TopicObjectValidator implements ConstraintValidator<ValidTopic, TopicDTO> {
+
     @Override
-    public boolean isValid(Topic topic, ConstraintValidatorContext context) {
-        if (topic.getTitle() == null || topic.getDescription() == null) return true;
-        return !topic.getTitle().equalsIgnoreCase(topic.getDescription());
+    public boolean isValid(TopicDTO dto, ConstraintValidatorContext context) {
+        if (dto == null) return true;
+        if (dto.title == null || dto.description == null) return true;
+        return !dto.title.equalsIgnoreCase(dto.description);
     }
 }

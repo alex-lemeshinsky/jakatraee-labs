@@ -5,11 +5,17 @@ import com.example.forum.model.User;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PostServiceImpl implements PostService {
     private List<Post> posts = new ArrayList<>();
+
+    private final AtomicLong idCounter = new AtomicLong(0);
 
     public PostServiceImpl() {
         posts.add(new Post(1L, """
@@ -47,18 +53,54 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getPostsByTopicId(Long topicId) {
-        List<Post> result = new ArrayList<>();
-        for (Post p : posts) {
-            if (p.getTopicId().equals(topicId)) {
-                result.add(p);
-            }
+        if (topicId == null) {
+            return new ArrayList<>();
         }
-        return result;
+
+        return posts.stream()
+                .filter(post -> topicId.equals(post.getTopicId()))
+                .sorted(Comparator.comparing(Post::getCreatedAt))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Post> getFilteredPosts(Long topicId, int page, int size) {
+        return posts.stream()
+                .filter(p -> p.getTopicId().equals(topicId))
+                .sorted((p1, p2) -> p2.getCreatedAt().compareTo(p1.getCreatedAt()))
+                .skip((long) (page - 1) * size)
+                .limit(size)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void createPost(Post post) {
-        post.setId(posts.size() + 1L);
+        post.setId(idCounter.incrementAndGet());
         posts.add(post);
+    }
+
+    @Override
+    public void updatePost(Post updatedPost) {
+        if (updatedPost == null || updatedPost.getId() == null) {
+            return;
+        }
+
+        for (Post p : posts) {
+            if (p.getId().equals(updatedPost.getId())) {
+                p.setContent(updatedPost.getContent());
+                p.setUpdatedAt(new Date());
+                return;
+            }
+        }
+    }
+
+    @Override
+    public Post getPostById(Long id) {
+        return posts.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public void deletePost(Long id) {
+        posts.removeIf(t -> t.getId().equals(id));
     }
 }

@@ -13,12 +13,16 @@ public class Post {
     @JsonbDateFormat("dd.MM.yyyy HH:mm")
     private Date createdAt;
 
+    @JsonbDateFormat("dd.MM.yyyy HH:mm")
+    private Date updatedAt;
+
     public Post(Long id, String content, User author, Long topicId) {
         this.id = id;
         this.content = content;
         this.author = author;
         this.topicId = topicId;
         this.createdAt = new Date();
+        this.updatedAt = null;
     }
 
     public Post() {}
@@ -61,5 +65,13 @@ public class Post {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

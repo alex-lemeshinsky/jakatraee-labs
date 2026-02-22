@@ -15,9 +15,11 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
     public Response toResponse(ConstraintViolationException exception) {
         Map<String, String> errors = exception.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
-                        v -> v.getPropertyPath().toString(),
-                        ConstraintViolation::getMessage
+                        violation -> violation.getPropertyPath().toString(),
+                        ConstraintViolation::getMessage,
+                        (existingValue, newValue) -> existingValue + ", " + newValue
                 ));
+
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(errors)
                 .build();
