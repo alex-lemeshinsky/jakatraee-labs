@@ -1,6 +1,8 @@
 package com.example.forum.model;
 
-import java.time.LocalDateTime;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+
+import java.util.Date;
 import java.util.List;
 
 public class Topic {
@@ -8,16 +10,20 @@ public class Topic {
     private String title;
     private String description;
     private boolean closed;
-    private LocalDateTime createdAt;
+
+    @JsonbDateFormat("dd.MM.yyyy HH:mm")
+    private Date createdAt;
 
     private List<Post> posts;
+
+    public Topic() {}
 
     public Topic(Long id, String title, String description, boolean closed) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.closed = closed;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = new Date();
     }
 
     public Long getId() { return id; }
@@ -25,18 +31,29 @@ public class Topic {
     public String getDescription() { return description; }
     public boolean isClosed() { return closed; }
     public List<Post> getPosts() { return posts; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Date getCreatedAt() { return createdAt; }
 
-    public void setPosts(List<Post> posts) { this.posts = posts; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setId(long id) { this.id = id; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public void setCreatedAt(LocalDateTime now) { this.createdAt = now; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getFormattedCreatedAt() {
-        if (createdAt == null) {
-            return "—";
-        }
-        return createdAt.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm"));
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

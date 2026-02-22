@@ -2,14 +2,16 @@ package com.example.forum.service;
 
 import com.example.forum.model.Post;
 import com.example.forum.model.User;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class PostServiceImpl implements PostService {
     private List<Post> posts = new ArrayList<>();
 
-    public PostServiceImpl() { // при ініціалізації додаєм тестові пости
+    public PostServiceImpl() {
         posts.add(new Post(1L, """
                 Я просто роблю лате/капучино на френч-пресі + молочна пінка з френч-пресу (так, це реально працює).
                 Рецепт на 1 велику чашку:
@@ -56,7 +58,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(Post post) {
-        post.setId(posts.size() + 1);
+        post.setId(posts.size() + 1L);
         posts.add(post);
     }
 }

@@ -1,36 +1,65 @@
 package com.example.forum.model;
 
-import java.time.LocalDateTime;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+
+import java.util.Date;
 
 public class Post {
     private Long id;
     private String content;
     private User author;
     private Long topicId;
-    private LocalDateTime createdAt;
+
+    @JsonbDateFormat("dd.MM.yyyy HH:mm")
+    private Date createdAt;
 
     public Post(Long id, String content, User author, Long topicId) {
         this.id = id;
         this.content = content;
         this.author = author;
         this.topicId = topicId;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = new Date();
     }
 
-    public Long getId() { return id; }
-    public String getContent() { return content; }
-    public User getAuthor() { return author; }
-    public Long getTopicId() { return topicId; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Post() {}
 
-    public void setId(long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setCreatedAt(LocalDateTime now) { this.createdAt = now; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getFormattedCreatedAt() {
-        if (createdAt == null) {
-            return "—";
-        }
-        return createdAt.format(java.time.format.DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm"));
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public Long getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(Long topicId) {
+        this.topicId = topicId;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -10,4 +10,5 @@ public interface TopicService {
     void createTopic(Topic topic);
     void updateTopic(Topic topic);
     void deleteTopic(Long id);
+    List<Topic> getFilteredTopics(String search, int page, int size);
 }

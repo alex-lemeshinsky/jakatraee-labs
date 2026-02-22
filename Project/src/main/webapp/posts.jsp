@@ -77,7 +77,7 @@
                         <div class="post-meta">
                             <strong><c:out value="${post.author.username}" /></strong>
                             <small>
-                                <c:out value="${post.formattedCreatedAt}" />
+                                <fmt:formatDate value="${post.createdAt}" pattern="dd.MM.yy HH:mm" />
                             </small>
                         </div>
                     </div>

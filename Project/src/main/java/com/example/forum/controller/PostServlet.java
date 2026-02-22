@@ -4,9 +4,8 @@ import com.example.forum.model.Post;
 import com.example.forum.model.Topic;
 import com.example.forum.model.User;
 import com.example.forum.service.PostService;
-import com.example.forum.service.PostServiceImpl;
 import com.example.forum.service.TopicService;
-import com.example.forum.service.TopicServiceImpl;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,8 +17,11 @@ import java.io.IOException;
 
 @WebServlet("/posts")
 public class PostServlet extends HttpServlet {
-    private PostService postService = new PostServiceImpl();
-    private TopicService topicService = new TopicServiceImpl();
+    @Inject
+    private PostService postService;
+
+    @Inject
+    private TopicService topicService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -94,7 +94,7 @@
                         <span>
                             <i class="far fa-calendar-alt"></i>
                             <small style="margin-left: 0.4rem;">
-                                <c:out value="${topic.formattedCreatedAt}" />
+                                <fmt:formatDate value="${topic.createdAt}" pattern="dd.MM.yy HH:mm" />
                             </small>
                         </span>
                         <span>
