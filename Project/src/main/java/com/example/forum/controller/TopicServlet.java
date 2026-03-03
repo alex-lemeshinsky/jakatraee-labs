@@ -3,7 +3,7 @@ package com.example.forum.controller;
 import com.example.forum.model.Topic;
 import com.example.forum.model.User;
 import com.example.forum.service.TopicService;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,7 +17,7 @@ import java.util.List;
 @WebServlet("/topics")
 public class TopicServlet extends HttpServlet {
 
-    @Inject
+    @EJB
     private TopicService topicService;
 
     @Override

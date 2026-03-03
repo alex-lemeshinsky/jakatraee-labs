@@ -5,7 +5,7 @@ import com.example.forum.model.Topic;
 import com.example.forum.model.User;
 import com.example.forum.service.PostService;
 import com.example.forum.service.TopicService;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,10 +17,10 @@ import java.io.IOException;
 
 @WebServlet("/posts")
 public class PostServlet extends HttpServlet {
-    @Inject
+    @EJB
     private PostService postService;
 
-    @Inject
+    @EJB
     private TopicService topicService;
 
     @Override

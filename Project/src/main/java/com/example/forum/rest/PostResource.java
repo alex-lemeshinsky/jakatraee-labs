@@ -4,7 +4,7 @@ import com.example.forum.dto.PostDTO;
 import com.example.forum.model.Post;
 import com.example.forum.model.User;
 import com.example.forum.service.PostService;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -17,7 +17,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PostResource {
 
-    @Inject
+    @EJB
     private PostService postService;
 
     @GET

@@ -2,7 +2,12 @@ package com.example.forum.service;
 
 import com.example.forum.model.Post;
 import com.example.forum.model.User;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.ConcurrencyManagement;
+import jakarta.ejb.ConcurrencyManagementType;
+import jakarta.ejb.Local;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,13 +16,17 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Singleton
+@Startup
+@Local(PostService.class)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class PostServiceImpl implements PostService {
     private List<Post> posts = new ArrayList<>();
 
     private final AtomicLong idCounter = new AtomicLong(0);
 
-    public PostServiceImpl() {
+    @PostConstruct
+    public void init() {
         posts.add(new Post(1L, """
                 Я просто роблю лате/капучино на френч-пресі + молочна пінка з френч-пресу (так, це реально працює).
                 Рецепт на 1 велику чашку:
@@ -50,6 +59,8 @@ public class PostServiceImpl implements PostService {
                 
                 В мене вже пів року виходить стабільно краще, ніж в 70% київських кав’ярень. Спробуйте — не пошкодуєте.""", new User("Latteman_22", "user"), 1L));
     }
+
+    public PostServiceImpl() {}
 
     @Override
     public List<Post> getPostsByTopicId(Long topicId) {

@@ -3,7 +3,7 @@ package com.example.forum.rest;
 import com.example.forum.dto.TopicDTO;
 import com.example.forum.model.Topic;
 import com.example.forum.service.TopicService;
-import jakarta.inject.Inject;
+import jakarta.ejb.EJB;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -15,7 +15,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class TopicResource {
 
-    @Inject
+    @EJB
     private TopicService topicService;
 
     @GET()

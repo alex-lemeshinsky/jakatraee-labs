@@ -1,25 +1,34 @@
 package com.example.forum.service;
 
 import com.example.forum.model.Topic;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.ConcurrencyManagement;
+import jakarta.ejb.ConcurrencyManagementType;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Local;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Singleton
+@Startup
+@Local(TopicService.class)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class TopicServiceImpl implements TopicService {
 
-    @Inject
+    @EJB
     private PostService postService;
 
     private List<Topic> topics = new ArrayList<>();
 
     private final AtomicLong idCounter = new AtomicLong(13L);
 
-    public TopicServiceImpl() {
+    @PostConstruct
+    public void init() {
         topics.add(new Topic(1L, "Як правильно готувати каву вдома, щоб була як в кав'ярні?", "Ділимося секретами, рецептами, сортами зерен, кавоварками та помилками, яких варто уникати. Від еспресо до альтернативних методів — усе про каву без фільтрів.", false));
         topics.add(new Topic(2L, "Як ви економите на продуктах у 2026 році?", "Список магазинів, акції, додатки, рецепти з дешевих продуктів, чи варто купувати оптом, де брати знижки. Реальні лайфхаки, а не теорія.", false));
         topics.add(new Topic(3L, "Які подкасти вас рятують у транспорті / на роботі?", "Українські, російськомовні, англомовні — все. Теми, ведучі, скільки слухаєте, чому саме вони. Рекомендації з посиланнями.", true));
