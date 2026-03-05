@@ -38,6 +38,29 @@
         "reveal": "always",
         "panel": "shared"
       }
+    },
+    {
+      "label": "Project: Run on local GlassFish (auto-reload)",
+      "type": "shell",
+      "command": "./scripts/glassfish-local-run.sh",
+      "options": {
+        "cwd": "${workspaceFolder}/Project"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Project: Stop local GlassFish domain1",
+      "type": "shell",
+      "command": "asadmin",
+      "args": ["stop-domain", "domain1"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     }
   ]
 }

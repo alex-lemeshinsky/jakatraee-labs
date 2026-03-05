@@ -16,6 +16,17 @@
       }
     },
     {
+      "name": "Run Project (Local GlassFish, auto-reload)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "cd \"${workspaceFolder}/Project\" && ./scripts/glassfish-local-run.sh",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\[glassfish-local\\] APP_URL\\s+(https?://\\S+)",
+        "uriFormat": "%s"
+      }
+    },
+    {
       "name": "Run JakartaEE Project (Jetty)",
       "type": "node-terminal",
       "request": "launch",
