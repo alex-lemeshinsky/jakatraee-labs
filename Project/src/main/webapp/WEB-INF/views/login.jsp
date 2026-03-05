@@ -28,7 +28,7 @@
         </form>
         <p style="text-align: center; margin-top: 1.5rem; color: var(--muted);">
             Ще немає акаунта?
-            <a href="${pageContext.request.contextPath}/register.jsp" style="color: var(--accent); text-decoration: none;">
+            <a href="${pageContext.request.contextPath}/register" style="color: var(--accent); text-decoration: none;">
                 Зареєструватися
             </a>
         </p>

@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="uk">
 
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Форум «Говоримо Відкрито»</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -15,9 +16,9 @@
             <h1>Говоримо Відкрито</h1>
             <p>Форум, де твоя думка має значення. Обговорюй, ділись досвідом, знаходь однодумців.</p>
             <div class="btn-group">
-                <a href="/topics" class="btn btn-primary">Переглянути теми</a>
-                <a href="/login" class="btn btn-outline">Увійти</a>
-                <a href="/register" class="btn btn-outline">Зареєструватися</a>
+                <a href="${pageContext.request.contextPath}/topics" class="btn btn-primary">Переглянути теми</a>
+                <a href="${pageContext.request.contextPath}/login" class="btn btn-outline">Увійти</a>
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-outline">Зареєструватися</a>
             </div>
         </div>
     </header>

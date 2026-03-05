@@ -29,7 +29,7 @@ public class PostServlet extends HttpServlet {
         Topic topic = topicService.getTopicById(topicId);
         topic.setPosts(postService.getPostsByTopicId(topicId));
         req.setAttribute("topic", topic);
-        req.getRequestDispatcher("/posts.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/posts.jsp").forward(req, resp);
     }
 
     @Override

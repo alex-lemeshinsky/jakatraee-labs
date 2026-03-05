@@ -24,7 +24,7 @@ public class TopicServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Topic> topics = topicService.getAllTopics();
         req.setAttribute("topics", topics);
-        req.getRequestDispatcher("/topics.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/topics.jsp").forward(req, resp);
     }
 
     @Override
