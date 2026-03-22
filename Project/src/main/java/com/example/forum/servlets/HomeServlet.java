@@ -1,4 +1,4 @@
-package com.example.forum.controller;
+package com.example.forum.servlets;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

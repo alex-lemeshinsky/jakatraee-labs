@@ -82,37 +82,49 @@
                         </div>
                     </div>
                     <div class="post-body">
-                        <div class="post-content">
-                                ${fn:escapeXml(post.content)}
-                        </div>
+                        <div class="post-content user-generated-content">${fn:escapeXml(post.content)}</div>
                     </div>
                 </div>
             </c:forEach>
         </div>
     </div>
-
-    <!-- Форма додавання нового допису -->
-    <c:if test="${not empty sessionScope.user && (sessionScope.user.role == 'user' || sessionScope.user.role == 'admin')}">
-        <div class="card" style="margin-top: 2.5rem;">
-            <h2 style="margin-bottom: 1.5rem;">Додати свій допис</h2>
-            <form action="${pageContext.request.contextPath}/posts" method="post">
-                <input type="hidden" name="topicId" value="${topic.id}">
-                <div class="form-group">
-                    <label for="content">Ваш допис</label>
-                    <textarea id="content" name="content" rows="6" required
-                              placeholder="Напишіть свій коментар чи думку..."></textarea>
+    <c:choose>
+        <c:when test="${topic.closed}">
+            <div class="card auth-prompt-card" style="border-color: var(--error); background: rgba(231, 76, 60, 0.05);">
+                <i class="fas fa-lock fa-3x" style="color: var(--error); margin-bottom: 1rem; display: block;"></i>
+                <h3 style="color: var(--error);">Обговорення закрито</h3>
+                <p style="color: var(--muted);">Адміністратор закрив цю тему для нових дописів.</p>
+            </div>
+        </c:when>
+        <c:when test="${empty sessionScope.user}">
+            <div class="card auth-prompt-card">
+                <i class="fas fa-user-lock fa-3x" style="color: var(--muted); margin-bottom: 1rem; display: block;"></i>
+                <h3>Хочете долучитися?</h3>
+                <p style="color: var(--muted); margin-bottom: 1.5rem;">Увійдіть, щоб залишати коментарі.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-outline">Увійти</a>
+                    <a href="${pageContext.request.contextPath}/register" class="btn btn-primary">Реєстрація</a>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-paper-plane"></i> Опублікувати
-                </button>
-            </form>
-        </div>
-    </c:if>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="card card-static" style="margin-top: 2.5rem;">
+                <h2>Додати свій допис</h2>
+                <form action="${pageContext.request.contextPath}/posts" method="post">
+                    <input type="hidden" name="topicId" value="${topic.id}">
+                    <div class="form-group" style="margin-top: 10px">
+                        <textarea name="content" rows="6" required placeholder="Ваш коментар..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Опублікувати</button>
+                </form>
+            </div>
+        </c:otherwise>
+    </c:choose>
 </div>
 <footer>
     <div class="container">
         <p>© 2026 Форум «Говоримо Відкрито»</p>
-        <small>Навчальний проєкт · Дані зберігаються тільки в пам'яті</small>
+        <small>Навчальний проєкт · Дані зберігаються в PostgreSQL (Docker)</small>
     </div>
 </footer>
 </body>

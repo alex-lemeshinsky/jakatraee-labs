@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -12,6 +14,11 @@
 <div class="container">
     <div class="auth-form">
         <h1>Реєстрація</h1>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger" style="color: #e74c3c; background: #fdf2f2; padding: 10px; border-radius: 5px; margin-bottom: 1rem; border: 1px solid #e74c3c;">
+                <i class="fas fa-exclamation-circle"></i> ${error}
+            </div>
+        </c:if>
         <form action="${pageContext.request.contextPath}/register" method="post">
             <div class="form-group">
                 <label for="username">Логін (використовуватиметься для входу)</label>
@@ -45,7 +52,7 @@
 <footer>
     <div class="container">
         <p>© 2026 Форум «Говоримо Відкрито»</p>
-        <small>Навчальний проєкт · Дані зберігаються тільки в пам'яті</small>
+        <small>Навчальний проєкт · Дані зберігаються в PostgreSQL (Docker)</small>
     </div>
 </footer>
 </body>

@@ -10,6 +10,7 @@ public class Topic {
     private String title;
     private String description;
     private boolean closed;
+    private int postCount;
 
     @JsonbDateFormat("dd.MM.yyyy HH:mm")
     private Date createdAt;
@@ -55,5 +56,13 @@ public class Topic {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public int getPostCount() {
+        return postCount;
+    }
+
+    public void setPostCount(int postCount) {
+        this.postCount = postCount;
     }
 }

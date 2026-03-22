@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TopicDAO {
-    Long save(Topic topic);
+    void save(Topic topic);
     Optional<Topic> findById(Long id);
     List<Topic> findAll();
     void update(Topic topic);

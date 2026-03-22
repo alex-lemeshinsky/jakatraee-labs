@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html lang="uk">
@@ -13,6 +14,11 @@
 <div class="container">
     <div class="auth-form">
         <h1>Увійти</h1>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger" style="color: #e74c3c; background: #fdf2f2; padding: 12px; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #e74c3c; font-size: 0.9rem;">
+                <i class="fas fa-exclamation-triangle"></i> ${error}
+            </div>
+        </c:if>
         <form action="${pageContext.request.contextPath}/login" method="post">
             <div class="form-group">
                 <label for="username">Логін або email</label>
@@ -37,7 +43,7 @@
 <footer>
     <div class="container">
         <p>© 2026 Форум «Говоримо Відкрито»</p>
-        <small>Навчальний проєкт · Дані зберігаються тільки в пам'яті</small>
+        <small>Навчальний проєкт · Дані зберігаються в PostgreSQL (Docker)</small>
     </div>
 </footer>
 </body>

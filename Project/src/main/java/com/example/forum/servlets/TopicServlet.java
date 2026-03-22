@@ -1,4 +1,4 @@
-package com.example.forum.controller;
+package com.example.forum.servlets;
 
 import com.example.forum.model.Topic;
 import com.example.forum.model.User;
@@ -28,7 +28,7 @@ public class TopicServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         if (user != null && "admin".equals(user.getRole())) {

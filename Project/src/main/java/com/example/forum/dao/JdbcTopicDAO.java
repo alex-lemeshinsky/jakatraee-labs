@@ -16,7 +16,7 @@ public class JdbcTopicDAO implements TopicDAO {
     private DataSource dataSource;
 
     @Override
-    public Long save(Topic topic) {
+    public void save(Topic topic) {
         String sql = "INSERT INTO topics (title, description, closed, created_at) VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -31,7 +31,6 @@ public class JdbcTopicDAO implements TopicDAO {
                 if (generatedKeys.next()) {
                     Long id = generatedKeys.getLong(1);
                     topic.setId(id);
-                    return id;
                 } else {
                     throw new SQLException("Не вдалося створити тему, ID не отримано.");
                 }
@@ -61,18 +60,24 @@ public class JdbcTopicDAO implements TopicDAO {
 
     @Override
     public List<Topic> findAll() {
-        String sql = "SELECT * FROM topics ORDER BY id ASC";
-        List<Topic> list = new ArrayList<>();
+        List<Topic> topics = new ArrayList<>();
+        String sql = "SELECT t.*, " +
+                "(SELECT COUNT(*) FROM posts p WHERE p.topic_id = t.id) as post_count " +
+                "FROM topics t ORDER BY t.created_at DESC";
+
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                list.add(mapRowToTopic(rs));
+                Topic topic = mapRowToTopic(rs);
+                topic.setPostCount(rs.getInt("post_count"));
+                topics.add(topic);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Помилка при отриманні тем", e);
+            throw new RuntimeException(e);
         }
-        return list;
+        return topics;
     }
 
     @Override

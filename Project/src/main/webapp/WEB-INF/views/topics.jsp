@@ -48,12 +48,6 @@
 <div class="container" style="padding-top: 1rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 0 1.5rem;">
         <h1 style="margin: 0;">Теми форуму</h1>
-
-        <c:if test="${sessionScope.user.role == 'admin'}">
-            <a href="#" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Створити тему
-            </a>
-        </c:if>
     </div>
     <div class="cards">
         <c:forEach var="topic" items="${topics}">
@@ -75,21 +69,28 @@
                                     <span class="status-open">Відкрита</span>
                                 </c:otherwise>
                             </c:choose>
+
                             <c:if test="${sessionScope.user.role == 'admin'}">
-                                <form action="${pageContext.request.contextPath}/topics" method="post" style="margin-top: 0.5rem;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="id" value="${topic.id}">
-                                    <button type="submit" class="btn btn-small"
-                                            style="background: var(--error); color: white;">
-                                        Видалити
-                                    </button>
-                                </form>
+                                <div class="topic-controls" style="margin-top: 0.8rem;">
+                                    <a href="${pageContext.request.contextPath}/topics/edit?id=${topic.id}"
+                                       class="btn-action-square btn-edit-square"
+                                       title="Редагувати тему">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <form action="${pageContext.request.contextPath}/topics" method="post" style="margin: 0;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="${topic.id}">
+                                        <button type="submit" class="btn-action-square btn-delete-square"
+                                                title="Видалити тему"
+                                                onclick="return confirm('Ви впевнені, що хочете видалити цю тему?')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </c:if>
                         </div>
                     </div>
-                    <p style="color: var(--muted); margin: 0.8rem 0;">
-                        <c:out value="${topic.description}"/>
-                    </p>
+                    <p class="user-generated-content" style="color: var(--muted); margin: 0.8rem 0;"><c:out value="${topic.description}"/></p>
                     <div style="display: flex; gap: 1.5rem; font-size: 0.9rem; color: var(--muted);">
                         <span>
                             <i class="far fa-calendar-alt"></i>
@@ -99,7 +100,7 @@
                         </span>
                         <span>
                             <i class="far fa-comment-dots"></i>
-                            ${topic.posts != null ? topic.posts.size() : 0} дописів
+                            <c:out value="${topic.postCount}" /> дописів
                         </span>
                     </div>
                 </div>
@@ -113,7 +114,7 @@
         </c:if>
     </div>
     <c:if test="${sessionScope.user.role == 'admin'}">
-        <div class="card" style="margin-top: 3rem;">
+        <div class="card card-static" style="margin-top: 3rem;">
             <h2 style="margin-bottom: 1.5rem;">Створити нову тему</h2>
             <form action="${pageContext.request.contextPath}/topics" method="post">
                 <input type="hidden" name="action" value="create">
@@ -138,7 +139,7 @@
 <footer>
     <div class="container">
         <p>© 2026 Форум «Говоримо Відкрито»</p>
-        <small>Навчальний проєкт · Дані зберігаються тільки в пам'яті</small>
+        <small>Навчальний проєкт · Дані зберігаються в PostgreSQL (Docker)</small>
     </div>
 </footer>
 </body>

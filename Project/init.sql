@@ -1,14 +1,15 @@
 CREATE TABLE users (
        username VARCHAR(100) PRIMARY KEY,
-       role VARCHAR(20) NOT NULL CHECK (role IN ('guest', 'user', 'admin'))
+       email VARCHAR(150) UNIQUE NOT NULL,
+       password VARCHAR(255) NOT NULL,
+       role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'admin'))
 );
 
-INSERT INTO users (username, role) VALUES
-       ('admin', 'admin'),
-       ('guest_user', 'guest'),
-       ('sa1mone', 'user'),
-       ('java_fan', 'user'),
-       ('coffee_lover', 'user');
+INSERT INTO users (username, email, password, role) VALUES
+       ('admin', 'admin@forum.com', 'admin123', 'admin'),
+       ('sa1mone', 'sa1mone@forum.com', 'password', 'user'),
+       ('Latteman_22', 'latteman_22@forum.com', 'password','user'),
+       ('Kavoman_88', 'kavoman_88@forum.com', 'password','user');
 
 CREATE TABLE topics (
         id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -41,3 +42,28 @@ CREATE TABLE posts (
        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
        updated_at TIMESTAMP
 );
+
+INSERT INTO posts (content, author_username, topic_id, created_at) VALUES
+        ('Я просто роблю лате/капучино на френч-пресі + молочна пінка з френч-пресу.
+Рецепт на 1 велику чашку:
+
+• 15 г кави (середній помел)
+• 250 мл води 93 °C
+• настояти 4 хвилини, повільно натиснути поршень
+• паралельно грію 150 мл молока до 60–65 °C
+• збиваю молоко тим самим френч-пресом (швидко 20–30 разів поршнем)
+
+Плюси: майже нуль брудного посуду.
+Мінуси: не справжній еспресо.', 'Kavoman_88', 1, NOW()),
+
+        ('Бери за основу правило 1:8–1:9 (кава : вода за вагою), це вже 80% успіху.
+Мій робочий рецепт:
+
+1. 18–20 г свіжозмеленої кави.
+2. 180–200 мл води.
+3. Турка на середній вогонь.
+
+Головні лайфхаки:
+- кава свіжа (не старше 3 тижнів);
+- вода 92–96 °C;
+- помел під свій посуд.', 'Latteman_22', 1, NOW());

@@ -223,6 +223,12 @@ footer {
     padding: 1.8rem;
 }
 
+.topic-card h3 a {
+    display: block;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
 .topic-card h3 a:hover {
     color: var(--accent);
     text-decoration: underline;
@@ -423,4 +429,94 @@ footer {
     .post-actions {
         flex-wrap: wrap;
     }
+}
+
+textarea {
+    resize: none;
+}
+
+.auth-prompt-card {
+    text-align: center;
+    padding: 2rem;
+    border: 2px dashed var(--border);
+    background: rgba(255,255,255,0.02);
+    margin-top: 2.5rem;
+}
+
+.btn-delete-square {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-delete-square:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.btn-delete-square:active {
+    transform: scale(0.95);
+}
+
+.card-static:hover {
+     transform: none !important;
+     box-shadow: none !important;
+     border-color: var(--border) !important;
+}
+
+.btn-action-square {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-edit-square {
+    background-color: #3498db;
+}
+
+.btn-edit-square:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Кнопка видалення (Червона) */
+.btn-delete-square {
+    background-color: #e74c3c;
+}
+
+.btn-delete-square:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.topic-controls {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user-generated-content {
+    white-space: pre-wrap;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
