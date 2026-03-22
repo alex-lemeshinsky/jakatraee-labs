@@ -15,11 +15,17 @@ RUN apk add --no-cache curl unzip \
     && curl -fsSL -o /tmp/glassfish.zip \
        https://download.eclipse.org/ee4j/glassfish/glassfish-7.0.22.zip \
     && unzip -q /tmp/glassfish.zip -d /opt \
+    && curl -L https://jdbc.postgresql.org/download/postgresql-42.7.10.jar -o ${GLASSFISH_HOME}/glassfish/lib/postgresql.jar \
     && rm /tmp/glassfish.zip \
     && apk del curl unzip
 
 COPY --from=build /app/target/Project-1.0-SNAPSHOT.war \
     ${GLASSFISH_HOME}/glassfish/domains/domain1/autodeploy/app.war
 
+COPY setup-glassfish.sh /opt/setup-glassfish.sh
+RUN chmod +x /opt/setup-glassfish.sh
+RUN ls -l /opt/setup-glassfish.sh && cat /opt/setup-glassfish.sh | head -n 1
+
 EXPOSE 8080 4848
-CMD ["asadmin", "start-domain", "--verbose", "domain1"]
+
+ENTRYPOINT ["/opt/setup-glassfish.sh"]
