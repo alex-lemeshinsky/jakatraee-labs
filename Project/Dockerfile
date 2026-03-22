@@ -24,7 +24,6 @@ COPY --from=build /app/target/Project-1.0-SNAPSHOT.war \
 
 COPY setup-glassfish.sh /opt/setup-glassfish.sh
 RUN chmod +x /opt/setup-glassfish.sh
-RUN ls -l /opt/setup-glassfish.sh && cat /opt/setup-glassfish.sh | head -n 1
 
 EXPOSE 8080 4848
 

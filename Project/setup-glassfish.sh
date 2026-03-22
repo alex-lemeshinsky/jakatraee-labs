@@ -1,47 +1,38 @@
 #!/bin/sh
-set -x
+set -e
 
-echo "AS_ADMIN_PASSWORD=" > /tmp/glassfish_pwd
-echo "AS_ADMIN_NEWPASSWORD=adminadmin" >> /tmp/glassfish_pwd
-
-echo "DB_USER is: ${DB_USER}"
-echo "DB_HOST is: ${DB_HOST}"
-echo "DB_NAME is: ${DB_NAME}"
-
-echo "Checking JDBC driver..."
-ls -l ${GLASSFISH_HOME}/glassfish/lib/postgresql.jar
+PWD_FILE="/opt/glassfish_pwd"
+echo "AS_ADMIN_PASSWORD=" > "$PWD_FILE"
+echo "AS_ADMIN_NEWPASSWORD=adminadmin" >> "$PWD_FILE"
 
 asadmin start-domain domain1
+sleep 10
 
-echo "Waiting for GlassFish to start..."
-sleep 15
+# Встановлюємо пароль
+asadmin --user admin --passwordfile "$PWD_FILE" change-admin-password
+echo "AS_ADMIN_PASSWORD=adminadmin" > "$PWD_FILE"
 
-# Зміна пароля
-asadmin --user admin --passwordfile /tmp/glassfish_pwd change-admin-password
-echo "AS_ADMIN_PASSWORD=adminadmin" > /tmp/glassfish_pwd
+asadmin --user admin --passwordfile "$PWD_FILE" set server-config.network-config.protocols.protocol.admin-listener.security-enabled=false
+asadmin --user admin --passwordfile "$PWD_FILE" set server-config.admin-service.jmx-connector.system.security-enabled=false
+asadmin --user admin --passwordfile "$PWD_FILE" create-jvm-options "-Dcom.sun.enterprise.admin.admin-service.no_hostname_verification=true"
+asadmin --user admin --passwordfile "$PWD_FILE" create-jvm-options "-Djava.rmi.server.hostname=localhost"
 
-asadmin --user admin --passwordfile /tmp/glassfish_pwd set server-config.admin-service.jmx-connector.system.security-enabled=false
+# Вмикаємо віддалений доступ
+asadmin --user admin --passwordfile "$PWD_FILE" enable-secure-admin
 
-# 3. Ігнорування перевірки хостів у SSL
-asadmin --user admin --passwordfile /tmp/glassfish_pwd create-jvm-options "-Djava.rmi.server.hostname=127.0.0.1"
-asadmin --user admin --passwordfile /tmp/glassfish_pwd create-jvm-options "-Dcom.sun.enterprise.admin.admin-service.no_hostname_verification=true"
+# Реєструємо драйвер
+asadmin --user admin --passwordfile "$PWD_FILE" add-library ${GLASSFISH_HOME}/glassfish/lib/postgresql.jar
 
-# Вмикаємо Secure Admin
-asadmin --user admin --passwordfile /tmp/glassfish_pwd enable-secure-admin
-
-# Створюємо Connection Pool
-asadmin --user admin --passwordfile /tmp/glassfish_pwd create-jdbc-connection-pool \
-    --restype jakarta.sql.DataSource \
+asadmin --user admin --passwordfile "$PWD_FILE" create-jdbc-connection-pool \
+    --restype javax.sql.DataSource \
     --datasourceclassname org.postgresql.ds.PGSimpleDataSource \
     --property User=${DB_USER}:Password=${DB_PASSWORD}:DatabaseName=${DB_NAME}:ServerName=${DB_HOST}:PortNumber=5432 \
     forumPool
 
-# Створюємо JDBC Resource (JNDI)
-asadmin --user admin --passwordfile /tmp/glassfish_pwd create-jdbc-resource --connectionpoolid forumPool jdbc/forumDS
+asadmin --user admin --passwordfile "$PWD_FILE" create-jdbc-resource --connectionpoolid forumPool jdbc/forumDS
 
-# 7. Перезавантажуємо домен
 asadmin stop-domain domain1
-rm /tmp/glassfish_pwd
+rm "$PWD_FILE"
 
-echo "GlassFish is starting with Secure Admin enabled..."
+echo "GlassFish setup finished!"
 exec asadmin start-domain --verbose domain1
