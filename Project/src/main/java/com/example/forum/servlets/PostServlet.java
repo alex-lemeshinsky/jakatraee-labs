@@ -34,14 +34,44 @@ public class PostServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-        if (user != null && ("user".equals(user.getRole()) || "admin".equals(user.getRole()))) {
-            Long topicId = Long.parseLong(req.getParameter("topicId"));
-            String content = req.getParameter("content");
-            Post post = new Post(null, content, user, topicId);
-            postService.createPost(post);
+        HttpSession session = req.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute("user") : null;
+
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
         }
-        resp.sendRedirect("/posts?topicId=" + req.getParameter("topicId"));
+
+        String action = req.getParameter("action");
+        String topicIdStr = req.getParameter("topicId");
+
+        try {
+            if ("delete".equals(action)) {
+                Long postId = Long.parseLong(req.getParameter("postId"));
+                Post post = postService.getPostById(postId);
+                if (post != null) {
+                    boolean isAdmin = "admin".equals(user.getRole());
+                    boolean isAuthor = post.getAuthor().getUsername().equals(user.getUsername());
+
+                    if (isAdmin || isAuthor) {
+                        postService.deletePost(postId);
+                    } else {
+                        resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Ви не можете видалити чужий допис");
+                        return;
+                    }
+                }
+            } else {
+                String content = req.getParameter("content");
+                if (content != null && !content.trim().isEmpty()) {
+                    Long topicId = Long.parseLong(topicIdStr);
+
+                    Post post = new Post(null, content, user, topicId);
+                    postService.createPost(post);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        resp.sendRedirect(req.getContextPath() + "/posts?topicId=" + topicIdStr);
     }
 }

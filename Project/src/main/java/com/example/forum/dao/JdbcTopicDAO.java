@@ -83,6 +83,7 @@ public class JdbcTopicDAO implements TopicDAO {
     @Override
     public void update(Topic topic) {
         String sql = "UPDATE topics SET title = ?, description = ?, closed = ? WHERE id = ?";
+
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -91,12 +92,9 @@ public class JdbcTopicDAO implements TopicDAO {
             ps.setBoolean(3, topic.isClosed());
             ps.setLong(4, topic.getId());
 
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Updating topic failed, no rows affected.");
-            }
+            ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Помилка при оновленні теми ID: " + topic.getId(), e);
+            throw new RuntimeException("Не вдалося оновити тему", e);
         }
     }
 

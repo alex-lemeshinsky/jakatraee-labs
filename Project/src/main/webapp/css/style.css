@@ -356,10 +356,11 @@ footer {
 .post-item {
     background: rgba(255,255,255,0.03);
     border-radius: 12px;
-    padding: 1.5rem;
     margin-bottom: 1.5rem;
     border: 1px solid var(--border);
     transition: all 0.2s ease;
+    position: relative;
+    padding: 1.5rem 3.5rem 1.5rem 1.5rem;
 }
 
 .post-item:hover {
@@ -519,4 +520,34 @@ textarea {
     word-wrap: break-word;
     word-break: break-word;
     max-width: 100%;
+}
+
+.btn-delete-absolute {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+
+    background-color: #e74c3c;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.btn-delete-absolute:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+    .post-item {
+        padding-right: 15px;
+    }
 }

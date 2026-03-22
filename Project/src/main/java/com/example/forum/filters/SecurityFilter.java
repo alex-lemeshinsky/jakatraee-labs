@@ -48,9 +48,15 @@ public class SecurityFilter implements Filter {
             res.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+        if (path.equals("/topics/edit") && !"admin".equals(user.getRole())) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ дозволено лише адміністраторам");
+            return;
+        }
+        String action = req.getParameter("action");
+        boolean isAdminAction = "update".equals(action) || "delete".equals(action) || "create".equals(action);
 
-        if (path.startsWith("/admin") && !"admin".equals(user.getRole())) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Тільки для адміністраторів");
+        if (path.equals("/topics") && isAdminAction && !"admin".equals(user.getRole())) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN, "У вас немає прав для цієї дії");
             return;
         }
         chain.doFilter(request, response);

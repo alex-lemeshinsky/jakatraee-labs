@@ -70,6 +70,18 @@
         <div class="posts-list">
             <c:forEach var="post" items="${topic.posts}">
                 <div class="post-item">
+                    <c:if test="${not empty sessionScope.user and (sessionScope.user.username == post.author.username or sessionScope.user.role == 'admin')}">
+                        <form action="${pageContext.request.contextPath}/posts" method="post" style="margin: 0;">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="postId" value="${post.id}">
+                            <input type="hidden" name="topicId" value="${topic.id}">
+                            <button type="submit" class="btn-delete-absolute"
+                                    title="Видалити допис"
+                                    onclick="return confirm('Ви впевнені, що хочете видалити свій допис?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </c:if>
                     <div class="post-header">
                         <div class="post-avatar">
                             <i class="fas fa-user-circle fa-2x"></i>
