@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/workspace
+      - maven_cache:/root/.m2
+    command: ["bash", "./scripts/glassfish-docker-dev.sh"]
+    environment:
+      DB_HOST: db
+      DB_NAME: forum_db
+      DB_USER: forumuser
+      DB_PASSWORD: forumpass
+      GLASSFISH_DOMAIN: domain1
+      HTTP_PORT: 8080
+      POLL_INTERVAL_SECONDS: 2
+
+volumes:
+  maven_cache:
