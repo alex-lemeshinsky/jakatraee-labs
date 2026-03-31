@@ -1,7 +1,9 @@
 package com.example.forum.rest;
 
+import com.example.forum.dto.TopicCloseRequestDTO;
 import com.example.forum.dto.TopicDTO;
 import com.example.forum.model.Topic;
+import com.example.forum.service.TopicClosureException;
 import com.example.forum.service.TopicService;
 import jakarta.ejb.EJB;
 import jakarta.validation.Valid;
@@ -59,10 +61,23 @@ public class TopicResource {
 
         existing.setTitle(dto.title);
         existing.setDescription(dto.description);
-        existing.setClosed(dto.closed);
 
         topicService.updateTopic(existing);
         return Response.ok(existing).build();
+    }
+
+    @POST
+    @Path("/{id}/close")
+    public Response closeTopic(@PathParam("id") Long id, TopicCloseRequestDTO dto) {
+        try {
+            Topic topic = topicService.closeTopic(id, dto != null && dto.simulateFailure);
+            return Response.ok(topic).build();
+        } catch (TopicClosureException e) {
+            Response.Status status = "Тему не знайдено.".equals(e.getMessage())
+                    ? Response.Status.NOT_FOUND
+                    : Response.Status.CONFLICT;
+            return Response.status(status).entity(e.getMessage()).build();
+        }
     }
 
     @DELETE

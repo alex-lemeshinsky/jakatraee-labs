@@ -55,11 +55,16 @@
                 <label for="description">Опис теми</label>
                 <textarea id="description" name="description" rows="6" required><c:out value="${topic.description}"/></textarea>
             </div>
-            <div class="form-group" style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                <label for="closed" style="margin: 0; cursor: pointer;">Закрити тему для обговорення:</label>
-                <input type="checkbox" id="closed" name="closed" value="true"
-                ${topic.closed ? 'checked' : ''}
-                       style="width: 20px; height: 20px; cursor: pointer;">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label style="margin-bottom: 0.4rem; display: block;">Поточний статус теми</label>
+                <c:choose>
+                    <c:when test="${topic.closed}">
+                        <span class="status-closed">Закрита</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class="status-open">Відкрита</span>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                 <button type="submit" class="btn btn-primary" style="flex: 2;">
@@ -70,6 +75,42 @@
                 </a>
             </div>
         </form>
+
+        <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border);">
+
+        <div>
+            <h2 style="margin-bottom: 0.5rem;">Демонстрація транзакційності</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">
+                Ця операція закриває тему та масово оновлює всі її дописи в одній container-managed transaction.
+            </p>
+
+            <c:choose>
+                <c:when test="${topic.closed}">
+                    <div class="card card-static" style="background: #fff8e1; border-left: 4px solid #f9a825;">
+                        Тема вже закрита. Для демонстрації rollback оберіть іншу відкриту тему.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <form action="${pageContext.request.contextPath}/topics" method="post">
+                        <input type="hidden" name="action" value="close-transactional">
+                        <input type="hidden" name="id" value="${topic.id}">
+
+                        <div class="form-group" style="display: flex; align-items: center; gap: 0.8rem;">
+                            <input type="checkbox" id="simulateFailure" name="simulateFailure" value="true"
+                                   style="width: 20px; height: 20px; cursor: pointer;">
+                            <label for="simulateFailure" style="margin: 0; cursor: pointer;">
+                                Зімітувати помилку та відкат транзакції
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-outline" style="width: 100%; margin-top: 1rem;"
+                                onclick="return confirm('Виконати транзакційне закриття теми?')">
+                            <i class="fas fa-shield-alt"></i> Закрити тему транзакційно
+                        </button>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 </div>
 

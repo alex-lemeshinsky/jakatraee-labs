@@ -2,34 +2,34 @@ package com.example.forum.service;
 
 import com.example.forum.dao.TopicDAO;
 import com.example.forum.model.Topic;
-import jakarta.ejb.ConcurrencyManagement;
-import jakarta.ejb.ConcurrencyManagementType;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Local;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
+import jakarta.ejb.Stateless;
+import jakarta.ejb.TransactionAttribute;
+import jakarta.ejb.TransactionAttributeType;
 
 import java.util.List;
 
-@Singleton
-@Startup
+@Stateless
 @Local(TopicService.class)
-@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class TopicServiceImpl implements TopicService {
 
     @EJB
-    private PostService postService;
+    private PostModerationService postModerationService;
 
     @EJB
     private TopicDAO topicDAO;
 
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Topic> getAllTopics() {
         return topicDAO.findAll();
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Topic getTopicById(Long id) {
         return topicDAO.findById(id).orElse(null);
     }
@@ -50,6 +50,23 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    public Topic closeTopic(Long id, boolean simulateFailure) {
+        Topic topic = topicDAO.findById(id)
+                .orElseThrow(() -> new TopicClosureException("Тему не знайдено."));
+
+        if (topic.isClosed()) {
+            throw new TopicClosureException("Тема вже закрита.");
+        }
+
+        topic.setClosed(true);
+        topicDAO.update(topic);
+        postModerationService.markTopicPostsAsClosed(id, simulateFailure);
+
+        return topic;
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Topic> getFilteredTopics(String search, int page, int size) {
         return topicDAO.findFiltered(search, page, size);
     }

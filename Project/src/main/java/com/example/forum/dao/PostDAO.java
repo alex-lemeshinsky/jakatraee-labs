@@ -10,6 +10,7 @@ public interface PostDAO {
     Optional<Post> findById(Long id);
     List<Post> findAllByTopicId(Long topicId);
     void update(Post post);
+    int appendClosureNoticeToTopicPosts(Long topicId, String notice, java.util.Date updatedAt);
     void delete(Long id);
     List<Post> findFiltered(Long topicId, int page, int size);
 }
