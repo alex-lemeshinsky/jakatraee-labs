@@ -1,8 +1,8 @@
 package com.example.forum.servlets;
 
-import com.example.forum.dao.TopicDAO;
 import com.example.forum.model.Topic;
 import com.example.forum.model.User;
+import com.example.forum.service.TopicClosureException;
 import com.example.forum.service.TopicService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -14,16 +14,12 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @WebServlet({"/topics", "/topics/edit"})
 public class TopicServlet extends HttpServlet {
 
     @EJB
     private TopicService topicService;
-
-    @EJB
-    private TopicDAO topicDAO;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,10 +29,9 @@ public class TopicServlet extends HttpServlet {
             String idParam = req.getParameter("id");
             if (idParam != null) {
                 Long id = Long.parseLong(idParam);
-                Optional<Topic> topicOptional = topicDAO.findById(id);
+                Topic topic = topicService.getTopicById(id);
 
-                if (topicOptional.isPresent()) {
-                    Topic topic = topicOptional.get();
+                if (topic != null) {
                     req.setAttribute("topic", topic);
                     req.getRequestDispatcher("/WEB-INF/views/editTopic.jsp").forward(req, resp);
                 } else {
@@ -72,24 +67,36 @@ public class TopicServlet extends HttpServlet {
                 Long id = Long.parseLong(req.getParameter("id"));
                 String title = req.getParameter("title");
                 String description = req.getParameter("description");
-                String closedParam = req.getParameter("closed");
-                boolean isClosed = "true".equals(closedParam);
                 if (title != null && !title.trim().isEmpty()) {
-                    Topic topic = new Topic();
-                    topic.setId(id);
+                    Topic topic = topicService.getTopicById(id);
+                    if (topic == null) {
+                        throw new TopicClosureException("Тему не знайдено.");
+                    }
                     topic.setTitle(title);
                     topic.setDescription(description);
-                    topic.setClosed(isClosed);
-                    topicDAO.update(topic);
+                    topicService.updateTopic(topic);
                 }
+                session.setAttribute("flashMessage", "Тему оновлено.");
                 resp.sendRedirect(req.getContextPath() + "/topics");
                 return;
+            } else if ("close-transactional".equals(action)) {
+                Long id = Long.parseLong(topicIdStr);
+                boolean simulateFailure = "true".equals(req.getParameter("simulateFailure"));
+                topicService.closeTopic(id, simulateFailure);
+                session.setAttribute("flashMessage",
+                        simulateFailure
+                                ? "Сценарій rollback відпрацював: зміни не збережені."
+                                : "Тему успішно закрито, а пов'язані дописи оновлено в межах однієї транзакції.");
             } else if ("delete".equals(action)) {
                 Long id = Long.parseLong(topicIdStr);
                 topicService.deleteTopic(id);
+                session.setAttribute("flashMessage", "Тему видалено.");
             }
+        } catch (TopicClosureException e) {
+            session.setAttribute("flashError", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+            session.setAttribute("flashError", "Під час виконання операції сталася помилка.");
         }
         resp.sendRedirect(req.getContextPath() + "/topics");
     }

@@ -79,6 +79,24 @@ public class JdbcPostDAO implements PostDAO {
     }
 
     @Override
+    public int appendClosureNoticeToTopicPosts(Long topicId, String notice, java.util.Date updatedAt) {
+        String sql = "UPDATE posts " +
+                "SET content = CONCAT(content, ?), updated_at = ? " +
+                "WHERE topic_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, notice);
+            ps.setTimestamp(2, new Timestamp(updatedAt.getTime()));
+            ps.setLong(3, topicId);
+
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при масовому оновленні дописів теми", e);
+        }
+    }
+
+    @Override
     public void delete(Long id) {
         String sql = "DELETE FROM posts WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
